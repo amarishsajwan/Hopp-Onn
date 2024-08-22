@@ -1,0 +1,12 @@
+import { Router } from "express";
+import userRoute from "./user";
+import eventRoute from "./event";
+import authMiddleware from "./middleware";
+import adminRoute from "./admin";
+import findEvent from "./findEvent";
+const router = Router();
+router.use("/admin", adminRoute);
+router.use("/user", userRoute);
+router.use("/event", eventRoute);
+router.use("/findEvent", findEvent);
+export default router;
