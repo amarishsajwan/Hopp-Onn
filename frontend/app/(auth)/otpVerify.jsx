@@ -1,7 +1,7 @@
 import { Image, ScrollView, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useState, useCallback } from 'react'
-import { useRouter, useRoute, useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
 import auth from '@react-native-firebase/auth';
 import { } from 'expo-router';
 
@@ -9,21 +9,23 @@ import CustomButton from '../../components/CustomButton'
 import OtpField from '../../components/OtpField'
 const otpVerify = () => {
     const [otp, setOtp] = useState('');
+    const [confirm, setConfirm] = useState(null)
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const router = useRouter();
-    const route = useRoute();
-    const { confirmation } = route.params();
+    const { confirmation } = useLocalSearchParams();
+
+
 
     const confirmCode = async () => {
         if (otp.length !== 6) { // Assuming OTP is 6 digits
             alert('Please enter a valid 6-digit OTP.');
             return;
         }
-
         setIsSubmitting(true);
+        setConfirm(confirmation)
         try {
-            await confirmation.confirm(otp);
+
+            await confirm.confirm(otp);
             console.log("login successfull")
             router.push('/search'); // Navigate to the next screen after successful OTP verification
         } catch (error) {
@@ -51,7 +53,7 @@ const otpVerify = () => {
                 />
                 <CustomButton
                     title="Verify"
-                    handlePress={confirmCode}
+                    handlePress={() => router.push('/search')}
                     containerStyles=" w-full mt-[250px] bg-primary"
                     isLoading={isSubmitting}
                 />

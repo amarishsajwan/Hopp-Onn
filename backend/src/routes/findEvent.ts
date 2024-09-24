@@ -12,31 +12,8 @@ interface RequestBody {
 router.post("", async (req: Request, res: Response) => {
   const { pickup, drop, time } = req.body as RequestBody;
   const parsedTime = new Date(Number(time));
-  console.log("reached in findEvents route");
+  console.log("reached in findEvents");
   console.log(pickup, drop, time);
-  // fetch pickup and drop location wrt id
-  //   const pickupId = await prisma.location.findFirst({
-  //     where: {
-  //       name: pickup,
-  //     },
-  //     select: {
-  //       id: true,
-  //       name: true,
-  //     },
-  //   });
-
-  //   const dropId = await prisma.location.findFirst({
-  //     where: {
-  //       name: drop,
-  //     },
-  //     select: {
-  //       id: true,
-  //       name: true,
-  //     },
-  //   });
-
-  //   const pickupLocation = pickup!.name;
-  //   const dropLocation = drop!.name;
 
   const events = await prisma.event.findMany({
     where: {
@@ -44,6 +21,7 @@ router.post("", async (req: Request, res: Response) => {
       dropLocation: drop,
     },
     select: {
+      id: true,
       user: {
         select: {
           username: true,
@@ -51,14 +29,13 @@ router.post("", async (req: Request, res: Response) => {
           gender: true,
         },
       },
-
       pickupLocation: true,
       dropLocation: true,
       time: true,
     },
   });
 
-  res.status(200).json({ events });
+  res.status(200).json(events);
 });
 
 export default router;

@@ -19,7 +19,7 @@ const profile = () => {
         setrefreshing(false)
     }
 
-    const [selectedImage, SetSelectedImage] = useState(null)
+    const [profileImg, SetProfileImg] = useState(null)
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [phoneNumber, setPhoneNumber] = useState("")
@@ -34,7 +34,7 @@ const profile = () => {
         })
         console.log(result)
         if (!result.canceled) {
-            SetSelectedImage(result.assets[0].uri)
+            SetProfileImg(result.assets[0].uri)
         }
     }
 
@@ -96,7 +96,7 @@ const profile = () => {
                             <View className="rounded-full border-2 border-black">
                                 <TouchableOpacity onPress={handleImageSelection} >
                                     <Image
-                                        source={{ uri: selectedImage }}
+                                        source={{ uri: profileImg }}
                                         className="w-[100px]  h-[100px]  rounded-full"
                                         resizeMode='contain'
                                     />

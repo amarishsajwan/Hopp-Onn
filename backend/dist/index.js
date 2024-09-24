@@ -28,15 +28,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const body_parser_1 = __importDefault(require("body-parser"));
-const mainRoute_1 = __importDefault(require("./routes/mainRoute"));
+const mainRoute_1 = __importDefault(require("./src/routes/mainRoute"));
 const dotenv = __importStar(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
-const swagger_1 = __importDefault(require("./swagger"));
+const swagger_1 = __importDefault(require("./src/swagger"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 dotenv.config();
 const port = 3000;
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
+app.use;
 app.use(body_parser_1.default.json());
 app.use("/docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default));
 app.use("/api/v1", mainRoute_1.default);

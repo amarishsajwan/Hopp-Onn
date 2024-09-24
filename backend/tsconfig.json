@@ -1,20 +1,24 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "target": "ESNext",
+    "rootDir": "./",
+    "module": "NodeNext", // Keep module as NodeNext
     "outDir": "./dist",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "resolveJsonModule": true, // Enables importing JSON files
+    "types": ["node"] // Ensures Node types are included
   },
   "include": [
     "src/**/*.ts",
     "process-env.d.ts",
     "express.d.ts",
-    "src/index.ts",
-    "src/swagger.ts"
+    "index.ts",
+    "src/swagger.ts",
+    "config/**/*.json"
   ],
   "exclude": ["node_modules"],
   "ts-node": {

@@ -17,6 +17,42 @@ const create = () => {
         //load data
         setrefreshing(false)
     }
+
+    const addRide = () => {
+
+        let data = JSON.stringify({
+            "pickup": pickup,
+            "drop": drop,
+            "time": "12"
+        });
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'http://localhost:192.168.0.180/api/v1/event/create',
+            headers: {
+                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOnsiaWQiOiI2NjM0NzBkZDcwMzcxZTYyYWQ1ODdhNTIifSwiaWF0IjoxNzE0NzEyNzk3fQ.EpBWsrvjWKdEkwmgKJZ_0_X-m6W6-ZTZ2zDdkH6U6vI',
+                'Content-Type': 'application/json'
+            },
+            data: data
+        };
+
+        async function makeRequest() {
+            try {
+                const response = await axios.request(config);
+                console.log(JSON.stringify(response.data));
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+
+        makeRequest();
+    }
+    useEffect(() => {
+        // addRide()
+    }, [])
+
     return (
         <SafeAreaView className="bg-white flex-1 h-full">
             <FlatList

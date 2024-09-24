@@ -11,30 +11,15 @@ const signIn = () => {
 
     const [phoneNumber, setPhoneNumber] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [confirm, setConfirm] = useState(null);
+    // const [confirm, setConfirm] = useState(null);
     const [code, setCode] = useState('');
-    // Handle login
-    // const onAuthStateChanged = (user) => {
-    //     if (user) {
-    //         // Some Android devices can automatically process the verification code (OTP) message, and the user would NOT need to enter the code.
-    //         // Actually, if he/she tries to enter it, he/she will get an error message because the code was already used in the background.
-    //         // In this function, make sure you hide the component(s) for entering the code and/or navigate away from this screen.
-    //         // It is also recommended to display a message to the user informing him/her that he/she has successfully logged in.
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    //     return subscriber; // unsubscribe on unmount
-    // }, []);
-
     // Handle the button press
     const signInWithPhoneNumber = async (phoneNumber) => {
         setIsSubmitting(true)
         try {
-            const confirmation = await auth().signInWithPhoneNumber(phoneNumber);
+            console.log("signInWithPhoneNumber()", phoneNumber)
+            const confirmation = await auth().signInWithPhoneNumber('+91' + phoneNumber);
             console.log("otp sent successfully")
-            setConfirm(confirmation);
             router.push({
                 pathname: '/otpVerify',
                 params: { confirmation },
@@ -61,12 +46,15 @@ const signIn = () => {
                         title=""
                         placeHolder="Enter Number"
                         value={phoneNumber}
-                        handleChangeText={(e) => setPhoneNumber('+917248721919')}
+                        handleChangeText={(e) => setPhoneNumber(e)}
                         otherStyles=""
                     />
                     <CustomButton
                         title="Sent Code"
-                        handlePress={() => signInWithPhoneNumber(phoneNumber)}
+                        handlePress={() => {
+                            // signInWithPhoneNumber(phoneNumber)
+                            router.push('/search')
+                        }}
                         containerStyles=" w-full mt-[300px] bg-primary"
                         isLoading={isSubmitting}
                     />
