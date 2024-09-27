@@ -58,9 +58,7 @@ router.post("/verifyOTP", async (req, res) => {
             });
         }
         // Generate a custom JWT token for session management
-        const token = jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET, {
-            expiresIn: "1d",
-        });
+        const token = jsonwebtoken_1.default.sign({ userId: user.id }, JWT_SECRET);
         return res.status(200).json({ token });
     }
     catch (error) {

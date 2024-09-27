@@ -9,53 +9,35 @@ import { router } from 'expo-router'
 import { useLocalSearchParams } from 'expo-router'
 import useFetch from '../../hook/useFetch'
 import axios from 'axios'
+import useApi from '../../hook/useApi';  // Import the generic hook
 
 const Search = () => {
-    const [rides, setRides] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
     const { pickup, drop } = useLocalSearchParams();
-    console.log(pickup, drop)
-    const time = "11"
-    const fetchRides = () => {
+    const time = "11";  // Static time value
 
+    const payload = JSON.stringify({
+        pickup,
+        drop,
+        time
+    });
 
-        let data = JSON.stringify({
-            "pickup": pickup,
-            "drop": drop,
-            "time": time
-        });
+    const config = {
+        headers: {
+            'Authorization': 'Bearer YOUR_TOKEN_HERE',
+            'Content-Type': 'application/json',
+        },
+    };
 
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'http://192.168.0.180:3000/api/v1/findEvent',
-            headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOnsiaWQiOiI2NjM0NzBkZDcwMzcxZTYyYWQ1ODdhNTIifSwiaWF0IjoxNzE0NzEyNzk3fQ.EpBWsrvjWKdEkwmgKJZ_0_X-m6W6-ZTZ2zDdkH6U6vI',
-                'Content-Type': 'application/json'
-            },
-            data: data
-        };
+    // Use the generic hook for POST request
+    const { data: rides, loading, error } = useApi('http://192.168.0.180:3000/api/v1/findEvent', payload, 'POST', config);
 
-        async function makeRequest() {
-            try {
-                const response = await axios.request(config);
-                console.log(response.data)
-                const events = response.data;
-                setRides([...events]);
-                setIsLoading(false);
-            }
-            catch (error) {
-                console.log("axios error", error);
-            }
-        }
-        makeRequest();
+    if (loading) {
+        return <Text>Loading rides...</Text>;
     }
-    useEffect(() => {
-        fetchRides()
-    }, [])
 
-    console.log("rides", rides, error)
+    if (error) {
+        return <Text>Error fetching rides: {error.message}</Text>;
+    }
     return (
         <SafeAreaView className="bg-white h-full px-4">
             <FlatList

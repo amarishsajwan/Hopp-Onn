@@ -10,8 +10,8 @@ dotenv.config();
 const port = 3000;
 const app = express();
 app.use(cors());
-app.use;
 app.use(bodyParser.json());
+app.use("/public", express.static("public"));
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/v1", mainRoute);
 

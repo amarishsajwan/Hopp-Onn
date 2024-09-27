@@ -1,78 +1,167 @@
-import { View, Text, TextInput, FlatList, Image, TouchableOpacity, ScrollView, RefreshControl, Alert } from 'react-native'
-import { useEffect, useState } from 'react'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomButton from '../../components/CustomButton'
-import { icons } from '../../constants'
-import { MaterialIcons } from '@expo/vector-icons'
-import SearchInput from '../../components/SearchInput'
-import RecentSearch from '../../components/RecentSearch'
-import { router } from 'expo-router'
+import { View, Text, TextInput, FlatList, Image, TouchableOpacity, ScrollView, RefreshControl, Alert } from 'react-native';
+import { useState, useEffect } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import CustomButton from '../../components/CustomButton';
+import { icons } from '../../constants';
+import { MaterialIcons } from '@expo/vector-icons';
+import SearchInput from '../../components/SearchInput';
+import RecentSearch from '../../components/RecentSearch';
+import { router } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
-import FormField from '../../components/FormField'
-import * as DocumentPicker from 'expo-document-picker'
+import FormField from '../../components/FormField';
+import * as DocumentPicker from 'expo-document-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import useApi from '../../hook/useApi';  // Import the custom hook
 
 const profile = () => {
-    const [refreshing, setrefreshing] = useState(false)
-    const onRefresh = async () => {
-        setrefreshing(true)
-        //load data
-        setrefreshing(false)
+    const [refreshing, setRefreshing] = useState(false);
+    const [profileImg, setProfileImg] = useState(null);
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [document, setDocument] = useState(null);
+    const [uploadImageUri, setUploadImageUri] = useState(null); // State to track image URI for upload
+    const [uploadStatusImage, setUploadStatusImage] = useState({ loading: false, error: null, success: false }); // State to track upload status
+    const [uploadStatusLicense, setUploadStatusLicense] = useState({ loading: false, error: null, success: false }); // State to track upload status
+    const [licenseFrontImg, setLicenseFrontImg] = useState(null); // Driving License Front Image
+    const [licenseBackImg, setLicenseBackImg] = useState(null); // Driving License Back Image
+    const [locations, setLocations] = useState([])
+
+    // Fetch user profile data
+    const { data: userData, loading, error } = useApi('http://192.168.0.180:3000/api/v1/user/userProfile');
+
+
+
+    useEffect(() => {
+        if (userData) {
+            setName(userData.username);
+            setPhoneNumber(userData.contact);
+            if (userData.profileImg) {
+                setProfileImg(`http://192.168.0.180:3000/${userData.profileImg.replace(/\\/g, '/')}`);
+            } else {
+                // Fallback to default user icon if profileImg is not available
+                setProfileImg(null);
+            }
+        }
+    }, [userData]);
+
+    useEffect(() => {
+        const handleUploadProfileImg = async () => {
+            if (!uploadImageUri) return;
+
+            const formData = new FormData();
+            const fileType = uploadImageUri.substring(uploadImageUri.lastIndexOf(".") + 1);
+            formData.append('profileImg', {
+                name: `profile-image.${fileType}`,
+                uri: uploadImageUri,
+                type: `image/${fileType}`,
+            });
+            console.log("formData", formData)
+            setUploadStatusImage({ loading: true, error: null, success: false }); // Start upload
+
+            try {
+                const response = await axios.post('http://192.168.0.180:3000/api/v1/user/uploadProfileImg', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    },
+                });
+
+                if (response.status === 200) {
+                    setUploadStatusImage({ loading: false, error: null, success: true });
+                    Alert.alert("Success", "Profile image uploaded successfully.");
+                }
+            } catch (error) {
+                console.error('Error uploading image:', error);
+                setUploadStatusImage({ loading: false, error: error.message, success: false });
+                Alert.alert("Error", "Failed to upload the image.");
+            }
+        };
+
+        handleUploadProfileImg(); // Trigger the upload
+    }, [uploadImageUri]); // Depend on the uploadImageUri state
+
+
+
+    if (error) {
+        <Text>Error fetching data: {error.message}</Text>;
     }
 
-    const [profileImg, SetProfileImg] = useState(null)
-    const [name, setName] = useState("")
-    const [email, setEmail] = useState("")
-    const [phoneNumber, setPhoneNumber] = useState("")
-    const [document, setDocument] = useState(null);
-
-    const handleImageSelection = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
+    const handleImageSelectionAndUpload = async () => {
+        const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
-            aspect: [4, 4],
-            quality: 1
-        })
-        console.log(result)
-        if (!result.canceled) {
-            SetProfileImg(result.assets[0].uri)
-        }
-    }
+            aspect: [5, 5],
+            quality: 1,
+        });
 
-    const selectDoc = async () => {
+        if (!result.canceled) {
+            const selectedImageUri = result.assets[0].uri;
+            setProfileImg(selectedImageUri);
+            setUploadImageUri(selectedImageUri); // Set the URI for upload
+        }
+    };
+
+    const handleLicenseImageSelection = async (type) => {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [3, 4],
+            quality: 1,
+        });
+
+        if (!result.canceled) {
+            const selectedImageUri = result.assets[0].uri;
+            if (type === 'front') {
+                setLicenseFrontImg(selectedImageUri);
+            } else if (type === 'back') {
+                setLicenseBackImg(selectedImageUri);
+            }
+        }
+    };
+
+    const handleUploadLicense = async () => {
+        if (!licenseFrontImg || !licenseBackImg) {
+            Alert.alert('Error', 'Please select both front and back images');
+            return;
+        }
+
+        const formData = new FormData();
+        const frontFileType = licenseFrontImg.substring(licenseFrontImg.lastIndexOf(".") + 1);
+        const backFileType = licenseBackImg.substring(licenseBackImg.lastIndexOf(".") + 1);
+
+        formData.append('licenseImg', {
+            name: `license-front.${frontFileType}`,
+            uri: licenseFrontImg,
+            type: `image/${frontFileType}`,
+        });
+
+        formData.append('licenseImg', {
+            name: `license-back.${backFileType}`,
+            uri: licenseBackImg,
+            type: `image/${backFileType}`,
+        });
+
+        setUploadStatusLicense({ loading: true, error: null, success: false });
+
         try {
-            let result = await DocumentPicker.getDocumentAsync({});
-            console.log(result)
-            if (result.type === 'success') {
-                setDocument(result);
+            const response = await axios.post('http://192.168.0.180:3000/api/v1/user/uploadDrivingLicense', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            if (response.status === 200) {
+                setUploadStatusLicense({ loading: false, error: null, success: true });
+                Alert.alert("Success", "License images uploaded successfully.");
             }
         } catch (error) {
-            console.log("User cancelled the upload", error)
+            setUploadStatusLicense({ loading: false, error: error.message, success: false });
+            Alert.alert("Error", "Failed to upload the images.");
         }
+    };
 
-    }
-    // Upload document to backend
-    // const uploadDocument = async () => {
-    //     if (document) {
-    //         const uri = document.uri;
-    //         const fileType = document.mimeType;
-    //         const fileName = document.name;
 
-    //         // Example upload function
-    //         try {
-    //             const response = await FileSystem.uploadAsync('https://your-server-url/upload', uri, {
-    //                 headers: {
-    //                     'Content-Type': fileType,
-    //                     'File-Name': fileName
-    //                 },
-    //                 httpMethod: 'POST',
-    //                 uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,
-    //             });
-    //             console.log('Upload response:', response);
-    //         } catch (error) {
-    //             console.error('Upload error:', error);
-    //         }
-    //     }
-    // };
     return (
         <SafeAreaView className="bg-white h-full flex-1  ">
             <ScrollView>
@@ -94,13 +183,13 @@ const profile = () => {
                         </View>
                         <View className=" w-full flex-col mt-5 justify-center items-center">
                             <View className="rounded-full border-2 border-black">
-                                <TouchableOpacity onPress={handleImageSelection} >
-                                    <Image
-                                        source={{ uri: profileImg }}
-                                        className="w-[100px]  h-[100px]  rounded-full"
-                                        resizeMode='contain'
-                                    />
+                                <Image
+                                    source={profileImg ? { uri: profileImg } : icons.user}
+                                    className="w-[100px]  h-[100px]  rounded-full"
+                                    resizeMode='contain'
+                                />
 
+                                <TouchableOpacity onPress={handleImageSelectionAndUpload} >
                                     <Image
                                         source={icons.camera}
                                         className="w-8 h-8 absolute z-[100] bottom-0 right-[2px]"
@@ -181,7 +270,7 @@ const profile = () => {
 
                                 </View>
                                 <View>
-                                    <TouchableOpacity onPress={selectDoc}>
+                                    <TouchableOpacity onPress={() => { handleLicenseImageSelection('front') }}>
                                         <Text className="font-medium text-sm text-primary">Choose file </Text>
                                     </TouchableOpacity>
                                     {document && (
@@ -202,7 +291,7 @@ const profile = () => {
                                     <Text className="font-light text-[10px] text-[#9D9D9D]" >Only JPG, PNG with max sie 2MB</Text>
 
                                 </View>
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => { handleLicenseImageSelection('back') }}>
                                     <View>
                                         <Text className="font-medium text-sm text-primary">Choose file </Text>
                                     </View>
@@ -211,6 +300,12 @@ const profile = () => {
                             </View>
 
                         </View>
+
+                        <CustomButton
+                            title="Save Changes"
+                            handlePress={handleUploadLicense}
+                            containerStyles=" justify-center items-center w-full mt-6 bg-primary"
+                        />
                     </View>
 
                 </View>
@@ -221,4 +316,3 @@ const profile = () => {
 };
 
 export default profile;
-
