@@ -55,7 +55,7 @@ HoppOn is a ride-sharing app designed to make traveling more convenient in areas
 - **Search Results**
 
   <!-- ![Search Ride](./frontend/screens/search_result.jpeg){ width=300,height=200 } -->
-  <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search_result.jpg" width="200" height="400" >
+  <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search_result.jpeg" width="200" height="400" >
 
 ---
 
