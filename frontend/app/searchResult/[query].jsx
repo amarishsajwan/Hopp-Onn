@@ -12,12 +12,12 @@ import axios from 'axios'
 import useApi from '../../hook/useApi';  // Import the generic hook
 
 const Search = () => {
-    const { pickup, drop } = useLocalSearchParams();
+    const { pickupId, dropId } = useLocalSearchParams();
     const time = "11";  // Static time value
 
     const payload = JSON.stringify({
-        pickup,
-        drop,
+        pickupId,
+        dropId,
         time
     });
 
@@ -30,7 +30,7 @@ const Search = () => {
 
     // Use the generic hook for POST request
     const { data: rides, loading, error } = useApi('http://192.168.0.180:3000/api/v1/findEvent', payload, 'POST', config);
-
+    console.log('rides', rides)
     if (loading) {
         return <Text>Loading rides...</Text>;
     }
@@ -42,70 +42,11 @@ const Search = () => {
         <SafeAreaView className="bg-white h-full px-4">
             <FlatList
                 ListHeaderComponent={() => (
-                    <>
-                        <View>
-                            <Text className="text-base font-medium text-black">Found Rides(10)</Text>
-                        </View>
-                        {/* <View className="p-4  rounded-xl w-full">
-                            <View className="space-y-3">
-                                <View className="flex-col space-y-3">
-                                    <View className="flex-row justify-between items-center">
-                                        <View>
-                                            <Text className="font-medium text-sm">Ride Detail</Text>
-                                            <Text className="font-normal text-gray-600 text-[8px]">04/08/2024</Text>
-                                        </View>
-                                        <Text className="font-bold text-base ">Rs 150</Text>
-                                    </View>
-                                    <View className=" space-y-3 ">
-                                        <View className="flex-row space-x-2 items-center">
-                                            <Image
-                                                source={icons.location}
-                                                className="w-5  h-5 "
-                                                resizeMode='contain'
-                                            />
-                                            <Text className="" >{pickup}</Text>
-                                        </View>
-                                        <View className="flex-row space-x-2 items-center">
-                                            <Image
-                                                source={icons.location}
-                                                className="w-5 h-5 "
-                                                resizeMode='contain'
-                                            />
-                                            <Text className="" >{drop}</Text>
-                                        </View>
-                                    </View>
 
-                                </View>
-                                <View className=" border border-gray-200" ></View>
-                                <View className="flex-row justify-between items-center">
-                                    <View className=" flex-row gap-[10px]">
-                                        <View className=" first-letter:rounded-full border-2 border-green-500">
-                                            <Image
-                                                source={images.profile}
-                                                className=" w-[37px]  h-[37px] rounded-full "
-                                                resizeMode='contain'
-                                            />
-                                        </View>
-                                        <View className="flex-col space-y-1">
-                                            <Text className="font-medium text-sm">Amarish</Text>
-                                            <Text className="font-normal text-[8px] text-[#9D9D9D]" >Profile Completed 70%</Text>
+                    <View>
+                        <Text className="text-base font-medium text-black">Found Rides({rides.length})</Text>
+                    </View>
 
-                                        </View>
-
-                                    </View>
-                                    <View className="flex-row justify-between space-x-2 items-center px-4 rounded-[60px] py-2 bg-primary">
-                                        <Image
-                                            source={icons.call}
-                                            className=" w-[19px]  h-[19px] "
-                                            resizeMode='contain'
-                                        />
-                                        <Text className="font-semibold text-sm">Call</Text>
-                                    </View>
-                                </View>
-
-                            </View>
-                        </View> */}
-                    </>
 
                 )}
                 data={rides}
@@ -128,7 +69,7 @@ const Search = () => {
                                             className="w-5  h-5 "
                                             resizeMode='contain'
                                         />
-                                        <Text className="" >{pickup}</Text>
+                                        <Text className="" >{item.pickupLocation}</Text>
                                     </View>
                                     <View className="flex-row space-x-2 items-center">
                                         <Image
@@ -136,17 +77,22 @@ const Search = () => {
                                             className="w-5 h-5 "
                                             resizeMode='contain'
                                         />
-                                        <Text className="" >{drop}</Text>
+                                        <Text className="" >{item.dropLocation}</Text>
                                     </View>
                                 </View>
 
                             </View>
-                            <View className=" border border-gray-200" ></View>
+                            <View className="border border-gray-200" ></View>
                             <View className="flex-row justify-between items-center">
                                 <View className=" flex-row gap-[10px]">
                                     <View className=" first-letter:rounded-full border-2 border-green-500">
                                         <Image
-                                            source={images.profile}
+                                            source={{
+                                                uri:
+                                                    item?.user?.profileImg && typeof item.user.profileImg === 'string'
+                                                        ? `http://192.168.0.180:3000/${item.user.profileImg.replace(/\\/g, '/')}`
+                                                        : Image.resolveAssetSource(icons.user).uri, // Resolve asset source for the default icon
+                                            }}
                                             className=" w-[37px]  h-[37px] rounded-full "
                                             resizeMode='contain'
                                         />

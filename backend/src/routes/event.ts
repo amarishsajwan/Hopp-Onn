@@ -12,10 +12,13 @@ interface RequestBody {
 }
 router.post("/create", async (req: Request, res: Response) => {
   try {
-    const userId = req.userId!;
+    // const userId = req.userId!;
+    const userId = "66412f4f6a2b122fcb90684d";
 
     const { pickupId, dropId, time } = req.body as RequestBody;
     const parsedTime = new Date(time);
+    console.log("input time", time);
+    console.log("parsed time", parsedTime);
 
     const pickup = await prisma.location.findUnique({
       where: {

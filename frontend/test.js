@@ -42,9 +42,17 @@ const Search = () => {
 
   // console.log('state variable outside fn()', locations)
 
-  const header = () => {
+  const events = [
+    { id: 1, pick: "Shivaji NAgar", drop: "Bharati Nagar" },
+    { id: 2, pick: "Shivaji NAgar", drop: "Bharati Nagar" },
+    { id: 3, pick: "Shivaji NAgar", drop: "Bharati Nagar" },
+    { id: 4, pick: "Shivaji NAgar", drop: "Bharati Nagar" },
+    { id: 5, pick: "Shivaji NAgar", drop: "Bharati Nagar" },
+  ];
+
+  const ListHeader = () => {
     return (
-      <SafeAreaView>
+      <ScrollView>
         <View className="mt-6 px-4 space-y-2">
           <View className="  items-start  mb-6 ">
             <View className=" flex-row w-full justify-between items-center   ">
@@ -70,11 +78,11 @@ const Search = () => {
               </Text>
 
               {/* <SearchInput
-                                placeHolder="Choose pick up point"
-                                icon={icons.location}
-                                value={pickup}
-                                handleTextChange={(e) => setPickup(e)}
-                            /> */}
+                                    placeHolder="Choose pick up point"
+                                    icon={icons.location}
+                                    value={pickup}
+                                    handleTextChange={(e) => setPickup(e)}
+                                /> */}
               <DropdownComponent1
                 placeHolder="Choose pick up point"
                 icon={icons.location}
@@ -95,9 +103,9 @@ const Search = () => {
               />
 
               {/* <SearchInput
-                                placeHolder="Schedule Date"
-                                icon={icons.calendar}
-                            /> */}
+                                    placeHolder="Schedule Date"
+                                    icon={icons.calendar}
+                                /> */}
             </View>
             <CustomButton
               title="Search Ride"
@@ -119,26 +127,16 @@ const Search = () => {
               }}
               containerStyles=" justify-center items-center w-full mt-6 bg-primary"
             />
-            <Text className="text-sm mt-8 font-semibold text-[#3E4958]">
-              Recent Search
-            </Text>
           </View>
         </View>
-      </SafeAreaView>
+      </ScrollView>
     );
   };
-
   return (
     <SafeAreaView className="bg-white h-full flex-1">
       <FlatList
-        ListHeaderComponent={header}
-        data={[
-          { id: 1, pick: "Shivaji NAgar", drop: "Bharati Nagar" },
-          { id: 2, pick: "Shivaji NAgar", drop: "Bharati Nagar" },
-          { id: 3, pick: "Shivaji NAgar", drop: "Bharati Nagar" },
-          { id: 4, pick: "Shivaji NAgar", drop: "Bharati Nagar" },
-          { id: 5, pick: "Shivaji NAgar", drop: "Bharati Nagar" },
-        ]}
+        ListHeaderComponent={ListHeader}
+        data={[locations, events]}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => (
           <View className=" bg-white mx-8 my-2 py-4 space-y-2 px-3 border border-primary rounded-xl border-1">
@@ -163,9 +161,9 @@ const Search = () => {
         ListEmptyComponent={() => (
           <Text className="text-black-200"> No recent rides</Text>
         )}
-        refreshControl={
-          <RefreshControl refereshing={refreshing} onRefresh={onRefresh} />
-        }
+        // refreshControl={
+        //   <RefreshControl refereshing={refreshing} onRefresh={onRefresh} />
+        // }
       />
     </SafeAreaView>
   );

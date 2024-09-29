@@ -7,6 +7,9 @@ import SearchInput from '../../components/SearchInput'
 import RecentSearch from '../../components/RecentSearch'
 import { router } from 'expo-router'
 import Checkbox from 'expo-checkbox';
+import axios from 'axios'
+import DropdownComponent2 from '../../components/DropDownInput2'
+
 
 const create = () => {
     const [isChecked1, setChecked1] = useState(false);
@@ -17,6 +20,27 @@ const create = () => {
         //load data
         setrefreshing(false)
     }
+    const [pickup, setPickup] = useState('')
+    const [drop, setDrop] = useState('')
+    const [locations, setLocations] = useState([])
+
+    // Fetch all places data
+    const fetchLocations = async () => {
+        try {
+            const response = await axios.get('http://192.168.0.180:3000/api/v1/location/city/places'); // Update URL if necessary
+            console.log('response.data', response.data)
+            setLocations(response.data); // Assuming the API returns an array of locations
+            console.log("state variable inside fn()", locations)
+        } catch (error) {
+            console.error('Error fetching locations:', error);
+            Alert.alert('Error', 'Failed to load locations. Please try again later.');
+        }
+    };
+    useEffect(() => {
+        fetchLocations()
+        console.log('Locations:', locations);
+
+    }, []);
 
     const addRide = () => {
 
@@ -63,7 +87,7 @@ const create = () => {
                                 <Text className="font-semibold w text-xl">Add Ride</Text>
                             </View>
                             <View className=" w-full my-4">
-                                <SearchInput
+                                {/* <SearchInput
                                     placeHolder="Choose pick up point"
                                     icon={icons.location}
                                 />
@@ -74,8 +98,32 @@ const create = () => {
                                 <SearchInput
                                     placeHolder="Schedule Date"
                                     icon={icons.calendar}
+                                /> */}
+
+
+                                <DropdownComponent2
+                                    placeHolder="Choose pick up point"
+                                    icon={icons.location}
+                                    locations={locations}
+                                    onSelect={(selectedPickup) => setPickup(selectedPickup)}
+
+                                />
+                                <DropdownComponent2
+                                    placeHolder="Choose pick up point"
+                                    icon={icons.location}
+                                    locations={locations}
+                                    onSelect={(selectedDrop) => setDrop(selectedDrop)}
+
+
                                 />
 
+                                {console.log('selected pickup', pickup)}
+                                {console.log('selected drop', drop)}
+                                <DropdownComponent2
+                                    placeHolder="Schedule Date"
+                                    icon={icons.calendar}
+
+                                />
                             </View>
                             <View className="my-2">
                                 <Text className="text-sm  font-normal text-gray-400" >

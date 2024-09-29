@@ -20,7 +20,7 @@ const index = () => {
                             handlePress={() => router.push('/signIn')}
                             containerStyles="w-full mb-2 "
                         />
-                        <Text className=" text-sm text-center font-normal text-gray-950">Get ride to great ride without the hasssel , dsfdfd dfd f dfd fdd</Text>
+                        <Text className=" text-sm text-center font-semibold text-gray-950"> Your Smart Ride, Anytime, Anywhere!</Text>
                     </View>
 
                 </View>
