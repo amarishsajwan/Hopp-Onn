@@ -35,24 +35,24 @@ HoppOn is a ride-sharing app designed to make traveling more convenient in areas
 
 - **Index**
 
-  ![Homepage](./frontend/screens/index.jpg){ width=300 }
+  ![Homepage](./frontend/screens/index.jpg){ width=100,height=200 }
 
 - **Profile**
 
-  ![Profile](./frontend/screens/user_profile.jpg){ width=300 }
+  ![Profile](./frontend/screens/user_profile.jpg){ width=300,height=200 }
 
 - **Create Event**
 
-  ![Create Event](./frontend/screens/add_ride.jpg){ width=300 }
+  ![Create Event](./frontend/screens/add_ride.jpg){ width=300,height=200 }
 
 - **Search Ride**
 
-  ![Search Ride](./frontend/screens/search-ride.jpg){ width=300 }
-  ![Search Ride](./frontend/screens/search_ride2.jpg){ width=300 }
+  ![Search Ride](./frontend/screens/search-ride.jpg){ width=300,height=200 }
+  ![Search Ride](./frontend/screens/search_ride2.jpg){ width=300,height=200 }
 
 - **Search Results**
 
-  ![Search Ride](./frontend/screens/search_result.jpeg){ width=300 }
+  ![Search Ride](./frontend/screens/search_result.jpeg){ width=300,height=200 }
 
 ---
 
