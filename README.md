@@ -13,6 +13,14 @@ HoppOn is a ride-sharing app designed to make traveling more convenient in areas
 
 ---
 
+## 📸 Screenshots
+
+<img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/index.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/user_profile.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/add_ride.jpg" width="200" height="400" >
+
+<img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search-ride.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search_ride2.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search_result.jpeg" width="200" height="400" >
+
+---
+
 ## 🛠️ Tech Stack
 
 ### Frontend:
@@ -31,11 +39,25 @@ HoppOn is a ride-sharing app designed to make traveling more convenient in areas
 
 ---
 
-## 📸 Screenshots
+## 🔐 Authentication
 
-<img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/index.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/user_profile.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/add_ride.jpg" width="200" height="400" >
+HoppOn uses **Firebase Phone OTP Authentication** for user login and signup. Here's how it works:
 
-<img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search-ride.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search_ride2.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search_result.jpeg" width="200" height="400" >
+- Users sign up or log in using their phone numbers.
+- An OTP is sent to the entered number for verification.
+- After successful OTP verification, a session is created with a **JWT token** for authentication with the backend.
+
+### 🔑 JWT Token
+
+Once the user is authenticated, the app uses a **JWT token** for secure communication with the backend APIs.
+
+---
+
+## 📡 Backend Data Flow
+
+- **User Details**: User profiles are fetched from the backend using REST APIs.
+- **Events (Rides)**: Rides are created and fetched based on user inputs for pickup and drop locations. The backend returns the relevant data such as ride details, driver info, etc.
+- **Real-time Data**: The app plans to integrate real-time data for future updates, such as live ride tracking.
 
 ---
 
