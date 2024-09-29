@@ -46,3 +46,18 @@ HoppOn is a ride-sharing app designed to make traveling more convenient in areas
    git clone https://github.com/your-username/hoppOn.git
    cd hoppOn
    ```
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 💡 Future Enhancements
+
+- Real-time ride tracking.
+- Rating system for drivers and riders.
+- Push notifications for ride updates and reminders.
+- Multilingual support for global users.
+
+## 📧 Contact
+
+For any inquiries or support, please reach out to [your-email@example.com](mailto:your-email@example.com).
