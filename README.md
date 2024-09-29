@@ -56,8 +56,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Real-time ride tracking.
 - Rating system for drivers and riders.
 - Push notifications for ride updates and reminders.
-- Multilingual support for global users.
 
 ## 📧 Contact
 
-For any inquiries or support, please reach out to [your-email@example.com](mailto:your-email@example.com).
+For any inquiries or support, please reach out to [amarish.sajwan@gmail.com](mailto:amarish.sajwan@gmail.com).
