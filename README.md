@@ -1,14 +1,14 @@
-##
+# hoppOn# HoppOn Ride-Sharing App 🚗
+
+HoppOn is a ride-sharing app designed to make traveling more convenient in areas where public transport is unreliable, rare, or unavailable. Users can create events based on their routes, allowing others to share rides with them at minimal costs, similar to public transportation.
+
+---
+
+## 📸 Screenshots
 
 <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/index.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/user_profile.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/add_ride.jpg" width="200" height="400" >
 
 <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search-ride.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search_ride2.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search_result.jpeg" width="200" height="400" >
-
----
-
-# hoppOn# HoppOn Ride-Sharing App 🚗
-
-HoppOn is a ride-sharing app designed to make traveling more convenient in areas where public transport is unreliable, rare, or unavailable. Users can create events based on their routes, allowing others to share rides with them at minimal costs, similar to public transportation.
 
 ---
 
