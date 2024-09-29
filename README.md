@@ -33,7 +33,8 @@ HoppOn is a ride-sharing app designed to make traveling more convenient in areas
 
 ## 📸 Screenshots
 
-<img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/index.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/user_profile.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/add_ride.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search-ride.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search_ride2.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search_result.jpeg" width="200" height="400" >
+<img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/index.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/user_profile.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/add_ride.jpg" width="200" height="400" >
+<img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search-ride.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search_ride2.jpg" width="200" height="400" > <img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/search_result.jpeg" width="200" height="400" >
 
 ---
 
