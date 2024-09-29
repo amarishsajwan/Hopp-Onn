@@ -35,11 +35,8 @@ HoppOn is a ride-sharing app designed to make traveling more convenient in areas
 
 - **Index**
 
-  <Image
-  source={require('./frontend/screens/index.jpg')}
-  style={{ width: 100, height: 200 }} // Adjust size according to your needs
-  resizeMode='contain' // Ensures the image is scaled properly without distortion
-  />
+<img src="https://github.com/amarishsajwan/Hopp-Onn/blob/main/frontend/screens/index.jpg" width="100" height="200" >
+'
 
 - **Profile**
 
