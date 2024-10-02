@@ -12,6 +12,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "jsEngine": "hermes",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.myapp2"
@@ -23,7 +24,9 @@
       },
       "package": "com.anonymous.myapp2",
       "googleServicesFile": "./google-services.json",
-      "permissions": ["android.permission.RECORD_AUDIO"]
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -44,7 +47,7 @@
           "iCloudContainerEnvironment": "Production"
         }
       ],
-      "expo-build-properties"
+      "expo-font"
     ],
     "extra": {
       "router": {

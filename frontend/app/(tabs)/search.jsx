@@ -3,12 +3,9 @@ import { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '../../components/CustomButton'
 import { icons } from '../../constants'
-import SearchInput from '../../components/SearchInput'
-import RecentSearch from '../../components/RecentSearch'
 import { router, usePathname } from 'expo-router'
-import useFetch from '../../hook/useFetch'
-import DropdownComponent1 from '../../components/DropDownInput1'
 import DropdownComponent2 from '../../components/DropDownInput2'
+import TimePickerModal from '../../components/TimePicker'
 import useApi from '../../hook/useApi'
 import axios from 'axios'
 
@@ -120,11 +117,13 @@ const Search = () => {
                             /> */}
                             {console.log('selected pickupId', pickupId)}
                             {console.log('selected dropId', dropId)}
-                            <DropdownComponent2
+                            {/* <DropdownComponent2
                                 placeHolder="Schedule Date"
                                 icon={icons.calendar}
 
-                            />
+                            /> */}
+
+                            {/* <TimePickerModal /> */}
 
                             {/* <SearchInput
                                 placeHolder="Choose your destination"
