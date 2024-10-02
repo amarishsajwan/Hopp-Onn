@@ -117,11 +117,11 @@ const Search = () => {
                             /> */}
                             {console.log('selected pickupId', pickupId)}
                             {console.log('selected dropId', dropId)}
-                            {/* <DropdownComponent2
+                            <DropdownComponent2
                                 placeHolder="Schedule Date"
                                 icon={icons.calendar}
 
-                            /> */}
+                            />
 
                             {/* <TimePickerModal /> */}
 
