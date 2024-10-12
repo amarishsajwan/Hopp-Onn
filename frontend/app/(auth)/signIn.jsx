@@ -53,7 +53,7 @@ const signIn = () => {
                         title="Sent Code"
                         handlePress={() => {
                             // signInWithPhoneNumber(phoneNumber)
-                            router.push('/search')
+                            router.push('search')
                         }}
                         containerStyles=" w-full mt-[300px] bg-primary"
                         isLoading={isSubmitting}

@@ -24,9 +24,7 @@
       },
       "package": "com.anonymous.myapp2",
       "googleServicesFile": "./google-services.json",
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ]
+      "permissions": ["android.permission.RECORD_AUDIO"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -35,6 +33,12 @@
       "@react-native-firebase/app",
       "@react-native-firebase/auth",
       "expo-build-properties",
+      [
+        "expo-dev-launcher",
+        {
+          "launchMode": "most-recent"
+        }
+      ],
       [
         "expo-image-picker",
         {

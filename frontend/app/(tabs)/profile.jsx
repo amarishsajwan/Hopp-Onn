@@ -3,14 +3,7 @@ import { useState, useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CustomButton from '../../components/CustomButton';
 import { icons } from '../../constants';
-import { MaterialIcons } from '@expo/vector-icons';
-import SearchInput from '../../components/SearchInput';
-import RecentSearch from '../../components/RecentSearch';
-import { router } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
-import FormField from '../../components/FormField';
-import * as DocumentPicker from 'expo-document-picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import useApi from '../../hook/useApi';  // Import the custom hook
 
@@ -27,9 +20,9 @@ const profile = () => {
     const [licenseFrontImg, setLicenseFrontImg] = useState(null); // Driving License Front Image
     const [licenseBackImg, setLicenseBackImg] = useState(null); // Driving License Back Image
     const [locations, setLocations] = useState([])
-
+    console.log(process.env.IP_ADDRESS)
     // Fetch user profile data
-    const { data: userData, loading, error } = useApi('http://192.168.0.180:3000/api/v1/user/userProfile');
+    const { data: userData, loading, error } = useApi(`http://${process.env.IP_ADDRESS}:3000/api/v1/user/userProfile`);
 
 
 
@@ -38,7 +31,7 @@ const profile = () => {
             setName(userData.username);
             setPhoneNumber(userData.contact);
             if (userData.profileImg) {
-                setProfileImg(`http://192.168.0.180:3000/${userData.profileImg.replace(/\\/g, '/')}`);
+                setProfileImg(`http://${process.env.IP_ADDRESS}:3000/${userData.profileImg.replace(/\\/g, '/')}`);
             } else {
                 // Fallback to default user icon if profileImg is not available
                 setProfileImg(null);
@@ -61,7 +54,7 @@ const profile = () => {
             setUploadStatusImage({ loading: true, error: null, success: false }); // Start upload
 
             try {
-                const response = await axios.post('http://192.168.0.180:3000/api/v1/user/uploadProfileImg', formData, {
+                const response = await axios.post(`http://${process.env.IP_ADDRESS}:3000/api/v1/user/uploadProfileImg`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },
@@ -145,7 +138,7 @@ const profile = () => {
         setUploadStatusLicense({ loading: true, error: null, success: false });
 
         try {
-            const response = await axios.post('http://192.168.0.180:3000/api/v1/user/uploadDrivingLicense', formData, {
+            const response = await axios.post(`http://${process.env.IP_ADDRESS}:3000/api/v1/user/uploadDrivingLicense`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

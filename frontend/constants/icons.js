@@ -23,6 +23,7 @@ import trash from "../assets/icons/trash.png";
 import user from "../assets/icons/user.png";
 import up from "../assets/icons/up_arrow.png";
 import down from "../assets/icons/down_arrow.png";
+import myRide from "../assets/icons/myRide.png";
 
 export default {
   play,
@@ -50,4 +51,5 @@ export default {
   user,
   up,
   down,
+  myRide,
 };

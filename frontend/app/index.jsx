@@ -8,6 +8,7 @@ import { images } from "../constants";
 import CustomButton from "../components/CustomButton";
 
 const index = () => {
+    console.log(process.env.IP_ADDRESS)
     return (
         <SafeAreaView className="bg-primary h-full flex-1" >
             <ScrollView contentContainerStyle={{ height: '100%' }}>

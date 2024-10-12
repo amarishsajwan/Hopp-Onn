@@ -5,20 +5,17 @@ import CustomButton from '../../components/CustomButton'
 import { icons } from '../../constants'
 import { router, usePathname } from 'expo-router'
 import DropdownComponent2 from '../../components/DropDownInput2'
-import TimePickerModal from '../../components/TimePicker'
-import useApi from '../../hook/useApi'
 import axios from 'axios'
+import TimePickerModal from '../../components/TimePickerInput'
 
 const Search = () => {
-    //  const {data:posts}= fetchData(getAllPosts)
+    console.log(process.env.IP_ADDRESS)
     const [refreshing, setrefreshing] = useState(false)
     const onRefresh = async () => {
         setrefreshing(true)
         //load data
         setrefreshing(false)
     }
-
-    const pathName = usePathname()
     const [pickupId, setPickupId] = useState('')
     const [dropId, setDropId] = useState('')
     const [locations, setLocations] = useState([])
@@ -26,7 +23,7 @@ const Search = () => {
     // Fetch all places data
     const fetchLocations = async () => {
         try {
-            const response = await axios.get('http://192.168.0.180:3000/api/v1/location/city/places'); // Update URL if necessary
+            const response = await axios.get(`http://${process.env.IP_ADDRESS}:3000/api/v1/location/city/places`); // Update URL if necessary
             console.log('response.data', response.data)
             setLocations(response.data); // Assuming the API returns an array of locations
             console.log("state variable inside fn()", locations)
@@ -40,17 +37,6 @@ const Search = () => {
         console.log('Locations:', locations);
 
     }, []);
-
-    // const { data, loading, error } = useApi('http://192.168.0.180:3000/api/v1/location/city/places');
-    // useEffect(() => {
-    //     if (locations) {
-    //         console.log(data)
-    //         console.log('Locations:', locations);
-    //     }
-    //     setLocations(data)
-    // }, [data]);
-
-    // console.log('state variable outside fn()', locations)
     return (
         <SafeAreaView className="bg-white h-full flex-1">
             <ScrollView>
@@ -64,11 +50,11 @@ const Search = () => {
                                 <Text className="font-semibold text-xl">Amarish Singh</Text>
                             </View>
                             <View className="mr-1">
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => router.push('Rides/myRides')}>
 
                                     <Image
-                                        source={icons.notification}
-                                        className="w-6  h-6 "
+                                        source={icons.myRide}
+                                        className="w-7  h-7"
                                         resizeMode='contain'
                                     />
                                 </TouchableOpacity>
@@ -77,21 +63,6 @@ const Search = () => {
                         </View>
                         <View className="px-4 py-8 ">
                             <Text className="px-1 font-semibold text-xl">Where are you going today?</Text>
-
-
-                            {/* <SearchInput
-                                placeHolder="Choose pick up point"
-                                icon={icons.location}
-                                value={pickupId}
-                                handleTextChange={(e) => setPickupId(e)}
-                            /> */}
-                            {/* <DropdownComponent1
-                                placeHolder="Choose pick up point"
-                                icon={icons.location}
-                                locations={locations}
-                                onSelect={(selectedPickup) => setPickupId(selectedPickup)}
-
-                            /> */}
                             <DropdownComponent2
                                 placeHolder="Choose pick up point"
                                 icon={icons.location}
@@ -107,37 +78,14 @@ const Search = () => {
 
 
                             />
-                            {/* <DropdownComponent1
-                                placeHolder="Choose your destination"
-                                icon={icons.location}
-                                locations={locations}
-                                onSelect={(selectedDrop) => setDropId(selectedDrop)}
-
-
-                            /> */}
                             {console.log('selected pickupId', pickupId)}
                             {console.log('selected dropId', dropId)}
-                            <DropdownComponent2
+
+
+                            <TimePickerModal
                                 placeHolder="Schedule Date"
                                 icon={icons.calendar}
-
                             />
-
-                            {/* <TimePickerModal /> */}
-
-                            {/* <SearchInput
-                                placeHolder="Choose your destination"
-                                icon={icons.location}
-                                value={dropId}
-                                handleTextChange={(e) => setDropId(e)}
-
-                            /> */}
-                            {/* <DropdownComponent2 /> */}
-
-                            {/* <SearchInput
-                                placeHolder="Schedule Date"
-                                icon={icons.calendar}
-                            /> */}
                         </View>
                         <CustomButton
                             title="Search Ride"

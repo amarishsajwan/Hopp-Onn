@@ -56,7 +56,7 @@ model Event{
   pickupLocation String
   dropLocation String
   time  DateTime
-  price Float    @default(0.00)
+  price Int    @default(0)
   status  Status @default(Active)
 }
 

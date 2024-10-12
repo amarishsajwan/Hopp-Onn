@@ -29,7 +29,7 @@ const Search = () => {
     };
 
     // Use the generic hook for POST request
-    const { data: rides, loading, error } = useApi('http://192.168.0.180:3000/api/v1/findEvent', payload, 'POST', config);
+    const { data: rides, loading, error } = useApi(`http://${process.env.IP_ADDRESS}:3000/api/v1/findEvent`, payload, 'POST', config);
     console.log('rides', rides)
     if (loading) {
         return <Text>Loading rides...</Text>;

@@ -1,6 +1,5 @@
 import { Router, Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { ClusterTime, DataKey, Timestamp } from "mongodb";
 
 const prisma = new PrismaClient();
 const router = Router();
@@ -37,5 +36,4 @@ router.get("/city/places", async (req: Request, res: Response) => {
     console.log("error", error);
   }
 });
-
 export default router;
