@@ -7,18 +7,26 @@ import { router, usePathname } from 'expo-router'
 import DropdownComponent2 from '../../components/DropDownInput2'
 import axios from 'axios'
 import TimePickerModal from '../../components/TimePickerInput'
+import useApi from '../../hook/useApi'
+
+
 
 const Search = () => {
     console.log(process.env.IP_ADDRESS)
     const [refreshing, setrefreshing] = useState(false)
-    const onRefresh = async () => {
-        setrefreshing(true)
-        //load data
-        setrefreshing(false)
-    }
     const [pickupId, setPickupId] = useState('')
     const [dropId, setDropId] = useState('')
     const [locations, setLocations] = useState([])
+    const [name, setName] = useState('')
+
+    const { data: userData, loading, error } = useApi(`http://${process.env.IP_ADDRESS}:3000/api/v1/user/userProfile`);
+
+    const onRefresh = async () => {
+        setrefreshing(true)
+        //load data
+        await fetchLocations();
+        setrefreshing(false)
+    }
 
     // Fetch all places data
     const fetchLocations = async () => {
@@ -37,9 +45,23 @@ const Search = () => {
         console.log('Locations:', locations);
 
     }, []);
+    if (loading) {
+        // Render a loading screen or component while data is being fetched
+        return (
+            <SafeAreaView className="bg-white h-full flex-1 justify-center items-center">
+                <Text>Loading...</Text>
+            </SafeAreaView>
+        );
+    }
     return (
         <SafeAreaView className="bg-white h-full flex-1">
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />}
+            >
                 <View className="mt-6 px-4 space-y-2">
                     <View className="  items-start  mb-6 " >
                         <View className=" flex-row w-full justify-between items-center   ">
@@ -47,7 +69,7 @@ const Search = () => {
                                 <Text className=" font-normal text-base text-black" >
                                     Hello👍
                                 </Text>
-                                <Text className="font-semibold text-xl">Amarish Singh</Text>
+                                <Text className="font-semibold text-xl">{userData.username}</Text>
                             </View>
                             <View className="mr-1">
                                 <TouchableOpacity onPress={() => router.push('Rides/myRides')}>
@@ -105,10 +127,10 @@ const Search = () => {
                             }}
                             containerStyles=" justify-center items-center w-full mt-6 bg-primary"
                         />
-                        <Text className="text-sm mt-8 font-semibold text-[#3E4958]">Recent Search</Text>
+                        {/* <Text className="text-sm mt-8 font-semibold text-[#3E4958]">Recent Search</Text> */}
                     </View>
                 </View>
-                <FlatList
+                {/* <FlatList
                     scrollEnabled={false}
                     data={[{ id: 1, pick: "Shivaji Nagar", drop: "Bharati Nagar" }, { id: 2, pick: "Shivaji NAgar", drop: "Bharati Nagar" }, { id: 3, pick: "Shivaji NAgar", drop: "Bharati Nagar" }, { id: 4, pick: "Shivaji NAgar", drop: "Bharati Nagar" }, { id: 5, pick: "Shivaji NAgar", drop: "Bharati Nagar" }]}
                     keyExtractor={(item) => item.$id}
@@ -140,7 +162,7 @@ const Search = () => {
                         onRefresh={onRefresh}
 
                     />}
-                />
+                /> */}
             </ScrollView>
         </SafeAreaView>
     )

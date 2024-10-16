@@ -66,16 +66,11 @@ router.post("/signup", async (req: Request, res: Response) => {
 
 router.get("/userProfile", async (req: Request, res: Response) => {
   try {
-    const userId = req.userId;
+    const userId = "66412f4f6a2b122fcb90684d";
 
     const user = await prisma.user.findUnique({
       where: {
-        id: "66412f4f6a2b122fcb90684d",
-      },
-      select: {
-        username: true,
-        contact: true,
-        profileImg: true,
+        id: userId,
       },
     });
     if (!user) {
@@ -92,10 +87,10 @@ router.post(
   "/uploadProfileImg",
   upload.single("profileImg"),
   async (req: Request, res: Response) => {
+    const userId = "66412f4f6a2b122fcb90684d";
     console.log("file", req.file);
     console.log("recieved at backend route");
     const profileImgPath = req.file?.path; // Assuming the frontend sends the profile image path
-    const userId = req.userId;
     console.log(userId);
     console.log("ImagePath", profileImgPath);
 
@@ -107,7 +102,7 @@ router.post(
       // Assuming the contact is unique and used to find the user
       const updatedUser = await prisma.user.update({
         where: {
-          id: "66412f4f6a2b122fcb90684d",
+          id: userId,
         },
         data: {
           profileImg: profileImgPath, // Update the profileImg field with the uploaded image path
@@ -130,8 +125,10 @@ router.post(
   "/uploadDrivingLicense",
   upload.array("licenseImg", 2),
   async (req: Request, res: Response) => {
-    const userId = "66412f4f6a2b122fcb90684d"; // Make sure this is set correctly from your authentication middleware
+    console.log("in update license and user details route");
+    const userId = "66412f4f6a2b122fcb90684d"; // Ensure this is set correctly from your authentication middleware
     const files = req.files as Express.Multer.File[];
+    const { contact, email, username } = req.body;
 
     if (!files || files.length < 2) {
       return res
@@ -143,42 +140,44 @@ router.post(
     const backImagePath = files[1]?.path;
 
     try {
-      // Check if the license already exists for the user
-      const existingLicense = await prisma.license.findUnique({
-        where: { userId: userId },
-      });
+      // Start a transaction to handle both the license update and user details
+      const [updatedLicense, updatedUser] = await prisma.$transaction([
+        // Check if the license already exists for the user
+        prisma.license.upsert({
+          where: { userId: userId },
+          update: {
+            frontImg: frontImagePath,
+            backImg: backImagePath,
+          },
+          create: {
+            userId: userId,
+            frontImg: frontImagePath,
+            backImg: backImagePath,
+          },
+        }),
+        // Update user details
+        prisma.user.update({
+          where: { id: userId },
+          data: {
+            contact,
+            email,
+            username,
+          },
+        }),
+      ]);
 
-      if (existingLicense) {
-        // Update the existing license
-        const updatedLicense = await prisma.license.update({
-          where: { id: existingLicense.id }, // Use the license ID for the update
-          data: {
-            frontImg: frontImagePath,
-            backImg: backImagePath,
-          },
-        });
-        return res.status(200).json({
-          msg: "License image updated successfully",
-          license: updatedLicense,
-        });
-      } else {
-        // Create a new license
-        const newLicense = await prisma.license.create({
-          data: {
-            userId: userId, // Link the new license to the user
-            frontImg: frontImagePath,
-            backImg: backImagePath,
-          },
-        });
-        return res.status(201).json({
-          msg: "License image uploaded successfully",
-          license: newLicense,
-        });
-      }
+      return res.status(200).json({
+        msg: "License and user details updated successfully",
+        license: updatedLicense,
+        user: updatedUser,
+      });
     } catch (error) {
-      console.log("Error uploading License image:", error);
-      return res.status(500).json({ msg: "Failed to upload license image" });
+      console.log("Error uploading License and updating details:", error);
+      return res
+        .status(500)
+        .json({ msg: "Failed to update license and details" });
     }
   }
 );
+
 export default router;
