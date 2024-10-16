@@ -72,6 +72,9 @@ router.get("/userProfile", async (req: Request, res: Response) => {
       where: {
         id: userId,
       },
+      include: {
+        licence: true, // Includes all fields of the related licence table
+      },
     });
     if (!user) {
       return res.status(404).json({ msg: "User not found" });

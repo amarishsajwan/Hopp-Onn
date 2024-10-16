@@ -99,27 +99,28 @@ const profile = () => {
 
     const { data: userData, loading, error } = useApi(`http://${process.env.IP_ADDRESS}:3000/api/v1/user/userProfile`);
     useEffect(() => {
-
         if (userData) {
             setName(userData.username);
             setEmail(userData.email);
             setPhoneNumber(userData.contact);
+
+
+            // Set profile image
             if (userData.profileImg) {
                 const formattedProfileImg = `http://${process.env.IP_ADDRESS}:3000/${userData.profileImg.replace(/\\/g, '/')}`;
                 setProfileImg(formattedProfileImg);
-                console.log('profile image', formattedProfileImg);
+                console.log('profile image:', formattedProfileImg);
             } else {
                 setProfileImg(null);
             }
 
-            if (userData?.licence) {
+            // Set license images if available
+            if (userData.licence) {
                 const formattedFrontImg = `http://${process.env.IP_ADDRESS}:3000/${userData.licence.frontImg.replace(/\\/g, '/')}`;
                 const formattedBackImg = `http://${process.env.IP_ADDRESS}:3000/${userData.licence.backImg.replace(/\\/g, '/')}`;
 
                 setLicenseFrontImg(formattedFrontImg);
                 setLicenseBackImg(formattedBackImg);
-                console.log('licenseFrontImg', formattedFrontImg);
-                console.log('licenseBackImg', formattedBackImg);
             } else {
                 setLicenseFrontImg(null);
                 setLicenseBackImg(null);
@@ -163,6 +164,11 @@ const profile = () => {
 
         handleUploadProfileImg(); // Trigger the upload
     }, [uploadImageUri]); // Depend on the uploadImageUri state
+
+    useEffect(() => {
+        console.log('licenseFrontImg:', licenseFrontImg);
+        console.log('licenseBackImg:', licenseBackImg);
+    }, [licenseFrontImg, licenseBackImg]);
 
 
 
@@ -256,7 +262,7 @@ const profile = () => {
             </SafeAreaView>
         );
     }
-    console.log(userData)
+    console.log('user details', userData)
     console.log('front and back license img ', licenseFrontImg, 'and', licenseBackImg)
     console.log('profile img ', profileImg)
     return (
@@ -320,25 +326,16 @@ const profile = () => {
                                         resizeMode="contain"
                                     />
                                 </TouchableOpacity>
-
                                 {/* Conditionally Render the Profile Image */}
-                                {profileImg && profileImg !== "" ? (
-                                    <Image
-                                        source={{ uri: profileImg }}
-                                        style={{ width: 300, height: 300, borderRadius: 150 }}
-                                        resizeMode="contain"
-                                        onError={() => {
-                                            console.warn("Failed to load image");
-                                            setProfileImg(null);
-                                        }}
-                                    />
-                                ) : (
-                                    <Image
-                                        source={icons.user}
-                                        style={{ width: 300, height: 300, borderRadius: 150 }}
-                                        resizeMode="contain"
-                                    />
-                                )}
+                                <Image
+                                    source={profileImg ? { uri: profileImg } : icons.user}
+                                    style={{ width: 300, height: 300, borderRadius: 150 }}
+                                    resizeMode="contain"
+                                    onError={() => {
+                                        console.warn("Failed to load image");
+                                        setProfileImg(null);
+                                    }}
+                                />
                             </View>
                         </Pressable>
                     </Modal>

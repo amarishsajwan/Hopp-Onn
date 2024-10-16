@@ -170,4 +170,29 @@ router.put("/update", async (req, res) => {
 router.put("/updateEventStatus", async (req, res) => {
     const userId = req.userId;
 });
+router.delete("/deleteEvent/:id", async (req, res) => {
+    const { id } = req.params; // Get the event ID from the URL parameters
+    try {
+        const event = await prisma.event.findUnique({
+            where: {
+                id,
+            },
+        });
+        // If event doesn't exist, return a 404 error
+        if (!event) {
+            return res.status(404).json({ message: "Event not found" });
+        }
+        // Delete the event
+        await prisma.event.delete({
+            where: {
+                id,
+            },
+        });
+        res.status(200).json({ message: "Event deleted successfully" });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to delete event", error });
+    }
+});
 exports.default = router;

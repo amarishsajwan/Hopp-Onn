@@ -24,6 +24,35 @@ const Search = () => {
         fetchRides();
         // Fetch rides when component mounts
     }, []);
+    // Function to delete a ride after confirmation
+    const confirmDelete = (rideId) => {
+        Alert.alert(
+            'Confirm Deletion',
+            'Are you sure you want to delete this ride?',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',  // Does nothing and closes the alert
+                },
+                {
+                    text: 'Yes',
+                    onPress: () => deleteRide(rideId),  // Calls deleteRide function if user presses "Yes"
+                },
+            ],
+            { cancelable: true }
+        );
+    };
+    const deleteRide = async (rideId) => {
+        try {
+            const response = await axios.delete(`http://${process.env.IP_ADDRESS}:3000/api/v1/event/deleteEvent/${rideId}`);
+            if (response.status === 200) {
+                Alert.alert('Success', 'Ride deleted successfully');
+                fetchRides();  // Refresh the list after deletion
+            }
+        } catch (error) {
+            Alert.alert('Error', 'Failed to delete ride. Please try again later.');
+        }
+    };
     console.log(rides)
     if (loading) {
         return (
@@ -32,6 +61,7 @@ const Search = () => {
             </SafeAreaView>
         );
     }
+
 
     return (
         <SafeAreaView className="bg-white h-full px-4">
@@ -87,14 +117,16 @@ const Search = () => {
                                         <Text className="font-bold text-base ">Rs {item.price}</Text>
                                     </View>
                                 </View>
-                                <View className="flex-row justify-between space-x-2 items-center px-4 py-2">
-                                    <Image
-                                        source={icons.trash}
-                                        className=" w-5  h-5 "
-                                        resizeMode='contain'
-                                    />
-                                    <Text className="font-semibold text-sm">Delete</Text>
-                                </View>
+                                <TouchableOpacity onPress={() => confirmDelete(item.id)}>
+                                    <View className="flex-row justify-between space-x-2 items-center px-4 py-2">
+                                        <Image
+                                            source={icons.trash}
+                                            className=" w-5  h-5 "
+                                            resizeMode='contain'
+                                        />
+                                        <Text className="font-semibold text-sm">Delete</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
 
                         </View>
