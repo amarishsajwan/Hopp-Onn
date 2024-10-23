@@ -6,9 +6,9 @@ import { icons } from '../../constants'
 import { router, usePathname } from 'expo-router'
 import DropdownComponent2 from '../../components/DropDownInput2'
 import axios from 'axios'
-import TimePickerModal from '../../components/TimePickerInput'
+// import TimePickerModal from '../../components/TimePickerInput'
 import useApi from '../../hook/useApi'
-
+import TimePickerRangeModal from '../../components/TimeRangeInput'
 
 
 const Search = () => {
@@ -17,7 +17,8 @@ const Search = () => {
     const [pickupId, setPickupId] = useState('')
     const [dropId, setDropId] = useState('')
     const [locations, setLocations] = useState([])
-    const [name, setName] = useState('')
+    const [toTime, setToTime] = useState('')
+    const [fromTime, setFromTime] = useState('');
 
     const { data: userData, loading, error } = useApi(`http://${process.env.IP_ADDRESS}:3000/api/v1/user/userProfile`);
 
@@ -45,6 +46,7 @@ const Search = () => {
         console.log('Locations:', locations);
 
     }, []);
+
     if (loading) {
         // Render a loading screen or component while data is being fetched
         return (
@@ -103,11 +105,21 @@ const Search = () => {
                             {console.log('selected pickupId', pickupId)}
                             {console.log('selected dropId', dropId)}
 
+                            <View className="flex-row w-auto  justify-between">
 
-                            <TimePickerModal
-                                placeHolder="Schedule Date"
-                                icon={icons.calendar}
-                            />
+
+                                <TimePickerRangeModal
+                                    placeHolder="From"
+                                    icon={icons.calendar}
+                                    onSelect={(selectedTime) => setFromTime(selectedTime)}
+                                />
+                                <TimePickerRangeModal
+                                    placeHolder="To"
+                                    icon={icons.calendar}
+                                    onSelect={(selectedTime) => setToTime(selectedTime)}
+
+                                />
+                            </View>
                         </View>
                         <CustomButton
                             title="Search Ride"
@@ -121,7 +133,7 @@ const Search = () => {
                                 // else {}
                                 router.push({
                                     pathname: `searchResult/${pickupId}${dropId}`,
-                                    params: { pickupId, dropId }
+                                    params: { pickupId, dropId, fromTime, toTime }
                                 });
 
                             }}

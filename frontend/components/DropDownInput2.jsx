@@ -42,6 +42,7 @@ const DropdownComponent2 = ({ placeHolder, icon, locations = [], onSelect = "" }
             )}
         />
     );
+
 };
 
 export default DropdownComponent2;

@@ -66,7 +66,7 @@ router.post("/signup", async (req: Request, res: Response) => {
 
 router.get("/userProfile", async (req: Request, res: Response) => {
   try {
-    const userId = "66412f4f6a2b122fcb90684d";
+    const userId = req.userId;
 
     const user = await prisma.user.findUnique({
       where: {
@@ -90,7 +90,7 @@ router.post(
   "/uploadProfileImg",
   upload.single("profileImg"),
   async (req: Request, res: Response) => {
-    const userId = "66412f4f6a2b122fcb90684d";
+    const userId = req.userId;
     console.log("file", req.file);
     console.log("recieved at backend route");
     const profileImgPath = req.file?.path; // Assuming the frontend sends the profile image path
@@ -136,7 +136,7 @@ router.post(
     if (!files || files.length < 2) {
       return res
         .status(400)
-        .json({ msg: "Both front and back images are required" });
+        .json({ msg: "Both front and back images are requires" });
     }
 
     const frontImagePath = files[0]?.path;

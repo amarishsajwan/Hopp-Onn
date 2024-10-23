@@ -10,15 +10,17 @@ import { useLocalSearchParams } from 'expo-router'
 import useFetch from '../../hook/useFetch'
 import axios from 'axios'
 import useApi from '../../hook/useApi';  // Import the generic hook
+import { openURL } from 'expo-linking'
 
 const Search = () => {
-    const { pickupId, dropId } = useLocalSearchParams();
-    const time = "11";  // Static time value
+    const { pickupId, dropId, fromTime, toTime } = useLocalSearchParams();
+    console.log("in query page ", pickupId, dropId, fromTime, toTime)
 
     const payload = JSON.stringify({
         pickupId,
         dropId,
-        time
+        fromTime,
+        toTime
     });
 
     const config = {
@@ -34,6 +36,11 @@ const Search = () => {
     if (loading) {
         return <Text>Loading rides...</Text>;
     }
+    const formatTime = (timeString) => {
+        const date = new Date(timeString);
+        // return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return timeString.slice(11, 16);
+    };
 
     if (error) {
         return <Text>Error fetching rides: {error.message}</Text>;
@@ -58,9 +65,9 @@ const Search = () => {
                                 <View className="flex-row justify-between items-center">
                                     <View>
                                         <Text className="font-medium text-sm">Ride Detail</Text>
-                                        <Text className="font-normal text-gray-600 text-[8px]">04/08/2024</Text>
+                                        <Text className="font-normal text-gray-600 text-lg">{formatTime(item.time)}</Text>
                                     </View>
-                                    <Text className="font-bold text-base ">Rs 150</Text>
+                                    <Text className="font-bold text-base ">₹{item.price}</Text>
                                 </View>
                                 <View className=" space-y-3 ">
                                     <View className="flex-row space-x-2 items-center">
@@ -104,14 +111,17 @@ const Search = () => {
                                     </View>
 
                                 </View>
-                                <View className="flex-row justify-between space-x-2 items-center px-4 rounded-[60px] py-2 bg-primary">
-                                    <Image
-                                        source={icons.call}
-                                        className=" w-[19px]  h-[19px] "
-                                        resizeMode='contain'
-                                    />
-                                    <Text className="font-semibold text-sm">Call</Text>
-                                </View>
+                                <TouchableOpacity onPress={() => { openURL(`tel:${item.user.contact}`) }}>
+                                    <View className="flex-row justify-between space-x-2 items-center px-4 rounded-[60px] py-2 bg-primary">
+
+                                        <Image
+                                            source={icons.call}
+                                            className=" w-[19px]  h-[19px] "
+                                            resizeMode='contain'
+                                        />
+                                        <Text className="font-semibold text-sm">Call</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
 
                         </View>

@@ -11,6 +11,10 @@ const port = 3000;
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+app.use("/", async (req: Request, res: Response, next: NextFunction) => {
+  req.userId = "664a2bf416514a6ccc17cd86";
+  next();
+});
 app.use("/public", express.static("public"));
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use("/api/v1", mainRoute);

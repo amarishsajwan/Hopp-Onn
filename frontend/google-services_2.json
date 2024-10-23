@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "184835294241",
+    "project_id": "hopp-onn",
+    "storage_bucket": "hopp-onn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184835294241:android:69a11a2f9fb5c4dc938f60",
+        "android_client_info": {
+          "package_name": "com.anonymous.myapp2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpMwe_vuxXHTdan0B3KgK4OjK4cpiEcGM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -38,6 +38,10 @@ const port = 3000;
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
+app.use("/", async (req, res, next) => {
+    req.userId = "664a2bf416514a6ccc17cd86";
+    next();
+});
 app.use("/public", express_1.default.static("public"));
 app.use("/docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default));
 app.use("/api/v1", mainRoute_1.default);

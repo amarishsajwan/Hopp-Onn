@@ -1,5 +1,5 @@
 import { View, ScrollView, Text, FlatList, Image, TouchableOpacity, ActivityIndicator, RefreshControl, Alert } from 'react-native'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { icons, images } from '../../constants'
 import axios from 'axios'
@@ -7,6 +7,7 @@ import axios from 'axios'
 const Search = () => {
     const [rides, setRides] = useState([]);  // Store fetched rides
     const [loading, setLoading] = useState(true);  // Loading state
+    const [refreshing, setRefreshing] = useState(false)
 
     // Function to fetch rides from backend
     const fetchRides = async () => {
@@ -24,6 +25,12 @@ const Search = () => {
         fetchRides();
         // Fetch rides when component mounts
     }, []);
+
+    const formatTime = (timeString) => {
+        // return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        return timeString.slice(11, 16);
+    };
+
     // Function to delete a ride after confirmation
     const confirmDelete = (rideId) => {
         Alert.alert(
@@ -53,6 +60,11 @@ const Search = () => {
             Alert.alert('Error', 'Failed to delete ride. Please try again later.');
         }
     };
+    const onRefresh = useCallback(() => {
+        setRefreshing(true); // Start refreshing
+        fetchRides()           // Refetch the API to get the updated data
+        setRefreshing(false); // Stop refreshing
+    }, [fetchRides]);
     console.log(rides)
     if (loading) {
         return (
@@ -83,7 +95,7 @@ const Search = () => {
                                 <View className="flex-row justify-between items-center">
                                     <View>
                                         <Text className="font-medium text-sm">Ride Detail</Text>
-                                        <Text className="font-normal text-gray-600 text-[8px]">04/08/2024</Text>
+                                        <Text className="font-normal text-gray-600 text-[8px]">{formatTime(item.time)}</Text>
                                     </View>
                                     <View className="items-center bg-[#00C247]/[0.22] py-1 px-2 rounded-2xl ">
                                         <Text className="font-medium text-[10px] text-green-500">Active</Text>
@@ -96,7 +108,7 @@ const Search = () => {
                                             className="w-5  h-5 "
                                             resizeMode='contain'
                                         />
-                                        <Text className="" >{item.dropLocation}</Text>
+                                        <Text className="" >{item.pickupLocation}</Text>
                                     </View>
                                     <View className="flex-row space-x-2 items-center">
                                         <Image
@@ -104,7 +116,7 @@ const Search = () => {
                                             className="w-5 h-5 "
                                             resizeMode='contain'
                                         />
-                                        <Text className="" >{item.pickupLocation}</Text>
+                                        <Text className="" >{item.dropLocation}</Text>
                                     </View>
                                 </View>
 
@@ -113,8 +125,8 @@ const Search = () => {
                             <View className="flex-row justify-between items-center">
                                 <View className="">
                                     <View className="flex-col">
-                                        <Text className="font-normal text-gray-400 text-[8px]">Amount</Text>
-                                        <Text className="font-bold text-base ">Rs {item.price}</Text>
+                                        <Text className="font-normal text-gray-400 text-xs">Amount</Text>
+                                        <Text className="font-bold text-base ">₹{item.price}</Text>
                                     </View>
                                 </View>
                                 <TouchableOpacity onPress={() => confirmDelete(item.id)}>
@@ -133,14 +145,12 @@ const Search = () => {
                     </View>
                 )}
 
-            // ListEmptyComponent={() =>
-            //     <Text className="text-black-200"> No recent rides</Text>
-            // }
-            // refreshControl={<RefreshControl
-            //     refereshing={refreshing}
-            //     onRefresh={onRefresh}
-
-            // />}
+                ListEmptyComponent={() =>
+                    <Text className="text-black-200"> No recent rides</Text>
+                }
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
             />
 
         </SafeAreaView>
