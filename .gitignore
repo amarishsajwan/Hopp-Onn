@@ -1,4 +1,6 @@
 frontend/node_modules/
+frontend/google-services.json
+frontend/google-services_2.json
 backend/node_modules/
 backend/config/serviceAccountKey.json
 backend/public/.gitkeep
