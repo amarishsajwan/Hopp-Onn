@@ -12,12 +12,13 @@ router.post("/create", async (req, res) => {
     try {
         const userId = req.userId;
         const { pickupId, dropId, time, price } = req.body;
+        const date = new Date(time);
         console.log("req.body", req.body);
         console.log("reached in create event route");
         console.log("input time", time);
         const parsedTime = (0, timeConversion_1.default)(time);
+        console.log("ISO String: ", parsedTime);
         console.log("parsed time in IST:", parsedTime);
-        console.log("parsed time", parsedTime);
         const pickup = await prisma.location.findUnique({
             where: {
                 id: pickupId,
@@ -60,6 +61,9 @@ router.get("/myevents", async (req, res) => {
     const getEvents = await prisma.event.findMany({
         where: {
             userId,
+        },
+        orderBy: {
+            time: "desc", // Sorting by date in descending order
         },
     });
     res.status(200).json(getEvents);

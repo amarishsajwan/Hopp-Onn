@@ -11,6 +11,7 @@ import { router } from 'expo-router';
 import { useFocusEffect } from '@react-navigation/native';
 
 const CreateRide = () => {
+    const [refreshing, setrefreshing] = useState(false)
     const [isChecked1, setChecked1] = useState(false); // Free Ride checkbox
     const [isChecked2, setChecked2] = useState(false); // Paid Ride checkbox
     const [pickupId, setPickupId] = useState(''); // Pickup Location
@@ -23,7 +24,7 @@ const CreateRide = () => {
     // Fetch all places data
     const fetchLocations = async () => {
         try {
-            const response = await axios.get(`http://${process.env.IP_ADDRESS}:3000/api/v1/location/city/places`);
+            const response = await axios.get(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/api/v1/location/city/places`);
             setLocations(response.data); // Assuming the API returns an array of locations
         } catch (error) {
             Alert.alert('Error', 'Failed to load locations. Please try again later.');
@@ -33,22 +34,17 @@ const CreateRide = () => {
     useEffect(() => {
         fetchLocations();
     }, []);
-    useFocusEffect(
-        React.useCallback(() => {
-            // Reset all states when screen comes into focus
-            resetForm();
-        }, [])
-    );
 
-    const resetForm = () => {
+    const onRefresh = async () => {
+        setrefreshing(true)
         setPickupId('');
         setDropId('');
         setTime('');
         setPrice('');
         setChecked1(false);
         setChecked2(false);
-    };
-
+        setrefreshing(false)
+    }
 
     // Handle adding a ride
     const handleAddRide = async () => {
@@ -58,10 +54,9 @@ const CreateRide = () => {
         }
 
         try {
-            const finalPrice = isChecked1 ? 0 : parseInt(price, 10);
+            const finalPrice = isChecked2 ? 0 : parseInt(price, 10);
             await addRide(pickupId, dropId, time, finalPrice);
             Alert.alert('Success', 'Ride added successfully');
-            resetForm()
             router.push('Rides/myRides');
         } catch (error) {
             Alert.alert('Error', 'Failed to add ride.');
@@ -79,7 +74,7 @@ const CreateRide = () => {
 
         const config = {
             method: 'post',
-            url: `http://${process.env.IP_ADDRESS}:3000/api/v1/event/create`,
+            url: `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/api/v1/event/create`,
             headers: {
                 'Authorization': 'Bearer YOUR_TOKEN_HERE', // Replace with actual token
                 'Content-Type': 'application/json',
@@ -98,7 +93,13 @@ const CreateRide = () => {
 
     return (
         <SafeAreaView className="bg-white flex-1 h-full">
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />}
+            >
                 <View className="mt-6 px-4 space-y-1">
                     <View className=" items-center  mb-6">
                         <View className="flex-row w-full justify-center items-center">
@@ -124,7 +125,7 @@ const CreateRide = () => {
 
                             {/* Time Picker */}
                             <TimePickerModal
-                                placeHolder="Schedule Date"
+                                placeHolder="Schedule Date & Time"
                                 icon={icons.calendar}
                                 onSelect={(selectedTime) => setTime(selectedTime)}
                             />
@@ -139,16 +140,16 @@ const CreateRide = () => {
                         <View className="mx-3 mt-1 flex-row space-x-3">
                             <View className="flex-row justify-start items-center space-x-1">
                                 <Checkbox value={isChecked1} onValueChange={() => { setChecked1(true); setChecked2(false); }} color={isChecked1 ? '#FFCC08' : ""} />
-                                <Text className="text-sm font-normal">Free Ride</Text>
+                                <Text className="text-sm font-normal">Paid Ride</Text>
                             </View>
                             <View className="flex-row justify-start items-center space-x-1">
                                 <Checkbox value={isChecked2} onValueChange={() => { setChecked2(true); setChecked1(false); }} color={isChecked2 ? '#FFCC08' : ""} />
-                                <Text className="text-sm font-normal">Paid Ride</Text>
+                                <Text className="text-sm font-normal">Free Ride</Text>
                             </View>
                         </View>
 
                         {/* Price Input */}
-                        {isChecked2 && (
+                        {isChecked1 && (
                             <View className="flex-row justify-start items-center ml-1 px-2 my-3 bg-[#F9F9F9]">
                                 <Image source={icons.moneyAdd} className="w-5 h-5" resizeMode='contain' />
                                 <TextInput

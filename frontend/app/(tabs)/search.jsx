@@ -12,19 +12,23 @@ import TimePickerRangeModal from '../../components/TimeRangeInput'
 
 
 const Search = () => {
-    console.log(process.env.IP_ADDRESS)
+    console.log(process.env.EXPO_PUBLIC_IP_ADDRESS)
     const [refreshing, setrefreshing] = useState(false)
     const [pickupId, setPickupId] = useState('')
     const [dropId, setDropId] = useState('')
     const [locations, setLocations] = useState([])
     const [toTime, setToTime] = useState('')
-    const [fromTime, setFromTime] = useState('');
+    const [fromTime, setFromTime] = useState(new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }));
 
-    const { data: userData, loading, error } = useApi(`http://${process.env.IP_ADDRESS}:3000/api/v1/user/userProfile`);
+    const { data: userData, loading, error } = useApi(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/api/v1/user/userProfile`);
 
     const onRefresh = async () => {
         setrefreshing(true)
-        //load data
+        setPickupId('')
+        setDropId('')
+        setLocations([])
+        setToTime('')
+        setFromTime('');
         await fetchLocations();
         setrefreshing(false)
     }
@@ -32,7 +36,7 @@ const Search = () => {
     // Fetch all places data
     const fetchLocations = async () => {
         try {
-            const response = await axios.get(`http://${process.env.IP_ADDRESS}:3000/api/v1/location/city/places`); // Update URL if necessary
+            const response = await axios.get(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/api/v1/location/city/places`); // Update URL if necessary
             console.log('response.data', response.data)
             setLocations(response.data); // Assuming the API returns an array of locations
             console.log("state variable inside fn()", locations)
@@ -105,7 +109,7 @@ const Search = () => {
                             {console.log('selected pickupId', pickupId)}
                             {console.log('selected dropId', dropId)}
 
-                            <View className="flex-row w-auto  justify-between">
+                            <View className="flex-row w-auto mt-4 justify-between">
 
 
                                 <TimePickerRangeModal
@@ -124,13 +128,17 @@ const Search = () => {
                         <CustomButton
                             title="Search Ride"
                             handlePress={() => {
-                                if (!pickupId && !dropId) {
+                                console.log("validation before if condition", pickupId, dropId, toTime, fromTime)
+                                if (!pickupId || !dropId || !toTime || !fromTime) {
+
                                     return Alert.alert('Missing Query', "Please input something to search results across database ")
                                 }
                                 // // if (pathName.startsWith('/searchResult')) {
                                 // //     router.setParams(query)
                                 // // }
                                 // else {}
+                                console.log("validation after if condition", pickupId, dropId, toTime, fromTime)
+
                                 router.push({
                                     pathname: `searchResult/${pickupId}${dropId}`,
                                     params: { pickupId, dropId, fromTime, toTime }

@@ -12,7 +12,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/", async (req: Request, res: Response, next: NextFunction) => {
-  req.userId = "664a2bf416514a6ccc17cd86";
+  req.userId = "66412f4f6a2b122fcb90684d";
   next();
 });
 app.use("/public", express.static("public"));

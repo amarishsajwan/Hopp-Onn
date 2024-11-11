@@ -39,7 +39,7 @@ const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
 app.use("/", async (req, res, next) => {
-    req.userId = "664a2bf416514a6ccc17cd86";
+    req.userId = "66412f4f6a2b122fcb90684d";
     next();
 });
 app.use("/public", express_1.default.static("public"));

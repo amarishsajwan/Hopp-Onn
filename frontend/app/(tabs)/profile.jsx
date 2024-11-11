@@ -26,7 +26,7 @@ const profile = () => {
 
 
     // Fetch user profile data
-    const { data: userData, loading, error } = useApi(`http://${process.env.IP_ADDRESS}:3000/api/v1/user/userProfile`);
+    const { data: userData, loading, error } = useApi(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/api/v1/user/userProfile`);
 
     useEffect(() => {
         if (userData) {
@@ -37,7 +37,7 @@ const profile = () => {
 
             // Set profile image
             if (userData.profileImg) {
-                const formattedProfileImg = `http://${process.env.IP_ADDRESS}:3000/${userData.profileImg.replace(/\\/g, '/')}`;
+                const formattedProfileImg = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/${userData.profileImg.replace(/\\/g, '/')}`;
                 setProfileImg(formattedProfileImg);
                 console.log('profile image:', formattedProfileImg);
             } else {
@@ -46,8 +46,8 @@ const profile = () => {
 
             // Set license images if available
             if (userData.licence) {
-                const formattedFrontImg = `http://${process.env.IP_ADDRESS}:3000/${userData.licence.frontImg.replace(/\\/g, '/')}`;
-                const formattedBackImg = `http://${process.env.IP_ADDRESS}:3000/${userData.licence.backImg.replace(/\\/g, '/')}`;
+                const formattedFrontImg = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/${userData.licence.frontImg.replace(/\\/g, '/')}`;
+                const formattedBackImg = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/${userData.licence.backImg.replace(/\\/g, '/')}`;
 
                 setLicenseFrontImg(formattedFrontImg);
                 setLicenseBackImg(formattedBackImg);
@@ -73,7 +73,7 @@ const profile = () => {
             setUploadStatusImage({ loading: true, error: null, success: false }); // Start upload
 
             try {
-                const response = await axios.post(`http://${process.env.IP_ADDRESS}:3000/api/v1/user/uploadProfileImg`, formData, {
+                const response = await axios.post(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/api/v1/user/uploadProfileImg`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },
@@ -134,7 +134,7 @@ const profile = () => {
 
         try {
             // Send the form data to the backend
-            const response = await axios.post(`http://${process.env.IP_ADDRESS}:3000/api/v1/user/uploadDrivingLicense`, formData, {
+            const response = await axios.post(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/api/v1/user/uploadDrivingLicense`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -160,7 +160,7 @@ const profile = () => {
     const onRefresh = async () => {
         setRefreshing(true)
         try {
-            const response = await axios.get(`http://${process.env.IP_ADDRESS}:3000/api/v1/user/userProfile`);
+            const response = await axios.get(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/api/v1/user/userProfile`);
 
             // Update your state with the new data
             const userData = response.data;
@@ -171,7 +171,7 @@ const profile = () => {
 
             // Set profile image
             if (userData.profileImg) {
-                const formattedProfileImg = `http://${process.env.IP_ADDRESS}:3000/${userData.profileImg.replace(/\\/g, '/')}`;
+                const formattedProfileImg = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/${userData.profileImg.replace(/\\/g, '/')}`;
                 setProfileImg(formattedProfileImg);
             } else {
                 setProfileImg(null);
@@ -179,8 +179,8 @@ const profile = () => {
 
             // Set license images
             if (userData.licence) {
-                const formattedFrontImg = `http://${process.env.IP_ADDRESS}:3000/${userData.licence.frontImg.replace(/\\/g, '/')}`;
-                const formattedBackImg = `http://${process.env.IP_ADDRESS}:3000/${userData.licence.backImg.replace(/\\/g, '/')}`;
+                const formattedFrontImg = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/${userData.licence.frontImg.replace(/\\/g, '/')}`;
+                const formattedBackImg = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/${userData.licence.backImg.replace(/\\/g, '/')}`;
 
                 setLicenseFrontImg(formattedFrontImg);
                 setLicenseBackImg(formattedBackImg);
@@ -198,7 +198,7 @@ const profile = () => {
     useFocusEffect(
         useCallback(async () => {
             try {
-                const response = await axios.get(`http://${process.env.IP_ADDRESS}:3000/api/v1/user/userProfile`);
+                const response = await axios.get(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/api/v1/user/userProfile`);
 
                 // Update your state with the new data
                 const userData = response.data;
@@ -209,7 +209,7 @@ const profile = () => {
 
                 // Set profile image
                 if (userData.profileImg) {
-                    const formattedProfileImg = `http://${process.env.IP_ADDRESS}:3000/${userData.profileImg.replace(/\\/g, '/')}`;
+                    const formattedProfileImg = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/${userData.profileImg.replace(/\\/g, '/')}`;
                     setProfileImg(formattedProfileImg);
                 } else {
                     setProfileImg(null);
@@ -217,8 +217,8 @@ const profile = () => {
 
                 // Set license images
                 if (userData.licence) {
-                    const formattedFrontImg = `http://${process.env.IP_ADDRESS}:3000/${userData.licence.frontImg.replace(/\\/g, '/')}`;
-                    const formattedBackImg = `http://${process.env.IP_ADDRESS}:3000/${userData.licence.backImg.replace(/\\/g, '/')}`;
+                    const formattedFrontImg = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/${userData.licence.frontImg.replace(/\\/g, '/')}`;
+                    const formattedBackImg = `http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/${userData.licence.backImg.replace(/\\/g, '/')}`;
 
                     setLicenseFrontImg(formattedFrontImg);
                     setLicenseBackImg(formattedBackImg);

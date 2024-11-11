@@ -50,4 +50,19 @@ router.post("/createLocation", async (req: Request, res: Response) => {
 
 router.get("/allCity", (req: Request, res: Response) => {});
 
+router.get("/allEvents", async (req: Request, res: Response) => {
+  try {
+    const events = await prisma.event.findMany({
+      orderBy: {
+        time: "desc", // Sorting by date in descending order
+      },
+    });
+
+    res.status(200).json(events);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error });
+  }
+});
+
 export default router;

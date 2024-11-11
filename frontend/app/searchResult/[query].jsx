@@ -9,12 +9,15 @@ import { router } from 'expo-router'
 import { useLocalSearchParams } from 'expo-router'
 import useFetch from '../../hook/useFetch'
 import axios from 'axios'
-import useApi from '../../hook/useApi';  // Import the generic hook
+import useApi from '../../hook/useApi';
 import { openURL } from 'expo-linking'
 
 const Search = () => {
     const { pickupId, dropId, fromTime, toTime } = useLocalSearchParams();
-    console.log("in query page ", pickupId, dropId, fromTime, toTime)
+    console.log("in query page pickupId  ", pickupId)
+    console.log("in query page dropId ", dropId)
+    console.log("in query page fromTime ", fromTime)
+    console.log("in query page toTime ", toTime)
 
     const payload = JSON.stringify({
         pickupId,
@@ -31,16 +34,28 @@ const Search = () => {
     };
 
     // Use the generic hook for POST request
-    const { data: rides, loading, error } = useApi(`http://${process.env.IP_ADDRESS}:3000/api/v1/findEvent`, payload, 'POST', config);
+    const { data: rides, loading, error } = useApi(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/api/v1/findEvent`, payload, 'POST', config);
     console.log('rides', rides)
     if (loading) {
         return <Text>Loading rides...</Text>;
     }
     const formatTime = (timeString) => {
+        // Convert the ISO string to a Date object
         const date = new Date(timeString);
-        // return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        return timeString.slice(11, 16);
+
+        // Format the date into 12-hour format with AM/PM
+        const options = {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+            timeZone: 'UTC'
+        };
+
+        const formattedTime = date.toLocaleString("en-US", options);
+        console.log(formattedTime); // Example output: "9:23 PM"
+        return formattedTime;
     };
+
 
     if (error) {
         return <Text>Error fetching rides: {error.message}</Text>;
@@ -49,12 +64,9 @@ const Search = () => {
         <SafeAreaView className="bg-white h-full px-4">
             <FlatList
                 ListHeaderComponent={() => (
-
                     <View>
                         <Text className="text-base font-medium text-black">Found Rides({rides.length})</Text>
                     </View>
-
-
                 )}
                 data={rides}
                 keyExtractor={(item) => item.id}

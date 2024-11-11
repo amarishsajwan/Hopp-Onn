@@ -12,7 +12,7 @@ const Search = () => {
     // Function to fetch rides from backend
     const fetchRides = async () => {
         try {
-            const response = await axios.get(`http://${process.env.IP_ADDRESS}:3000/api/v1/event/myevents`);  // Replace with your backend URL
+            const response = await axios.get(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/api/v1/event/myevents`);  // Replace with your backend URL
             setRides(response.data);  // Store the fetched data in state
             setLoading(false);  // Stop the loading spinner
         } catch (error) {
@@ -27,8 +27,20 @@ const Search = () => {
     }, []);
 
     const formatTime = (timeString) => {
-        // return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        return timeString.slice(11, 16);
+        // Convert the ISO string to a Date object
+        const date = new Date(timeString);
+
+        // Format the date into 12-hour format with AM/PM
+        const options = {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true,
+            timeZone: 'UTC'
+        };
+
+        const formattedTime = date.toLocaleString("en-US", options);
+        console.log(formattedTime); // Example output: "9:23 PM"
+        return formattedTime;
     };
 
     // Function to delete a ride after confirmation
@@ -51,7 +63,7 @@ const Search = () => {
     };
     const deleteRide = async (rideId) => {
         try {
-            const response = await axios.delete(`http://${process.env.IP_ADDRESS}:3000/api/v1/event/deleteEvent/${rideId}`);
+            const response = await axios.delete(`http://${process.env.EXPO_PUBLIC_IP_ADDRESS}:3000/api/v1/event/deleteEvent/${rideId}`);
             if (response.status === 200) {
                 Alert.alert('Success', 'Ride deleted successfully');
                 fetchRides();  // Refresh the list after deletion
@@ -81,7 +93,7 @@ const Search = () => {
                 ListHeaderComponent={() => (
 
                     <View>
-                        <Text className="text-base font-medium text-black">Found Rides({rides.length})</Text>
+                        <Text className="text-base font-medium mb-4 text-black">Found Rides({rides.length})</Text>
                     </View>
 
 
@@ -89,13 +101,13 @@ const Search = () => {
                 data={rides}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
-                    <View className="p-4  rounded-xl w-full">
-                        <View className="space-y-3">
+                    <View className="p-2 border-2 border-slate-100 bg-slate-50 shadow-black mb-4 rounded-xl  w-full">
+                        <View className="space-y-3 ">
                             <View className="flex-col space-y-3">
                                 <View className="flex-row justify-between items-center">
                                     <View>
-                                        <Text className="font-medium text-sm">Ride Detail</Text>
-                                        <Text className="font-normal text-gray-600 text-[8px]">{formatTime(item.time)}</Text>
+                                        <Text className="font-medium text-sm mb-1 ">Ride Detail</Text>
+                                        <Text className="font-normal text-gray-600 ml-1 text-sm">{formatTime(item.time)}</Text>
                                     </View>
                                     <View className="items-center bg-[#00C247]/[0.22] py-1 px-2 rounded-2xl ">
                                         <Text className="font-medium text-[10px] text-green-500">Active</Text>

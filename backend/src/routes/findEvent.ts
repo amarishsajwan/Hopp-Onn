@@ -11,16 +11,19 @@ interface RequestBody {
 }
 router.post("", async (req: Request, res: Response) => {
   try {
+    console.log("reached in find event");
     const { pickupId, dropId, fromTime, toTime } = req.body as RequestBody;
     console.log("req body", pickupId, dropId, fromTime, toTime);
-    const parsedFromTimeIST = parsedTimeIST(fromTime);
-    const parsedToTimeIST = parsedTimeIST(toTime);
-    if (
-      isNaN(parsedFromTimeIST.getTime()) ||
-      isNaN(parsedToTimeIST.getTime())
-    ) {
+    console.log("pickupId", pickupId);
+    console.log("dropId", dropId);
+    console.log("fromTime", fromTime, fromTime.length);
+    console.log("toTime ", toTime, toTime.length);
+    const parsedFromTimeIST: any = parsedTimeIST(fromTime);
+    const parsedToTimeIST: any = parsedTimeIST(toTime);
+    console.log(typeof parsedFromTimeIST, parsedToTimeIST);
+    if (isNaN(parsedFromTimeIST) || isNaN(parsedToTimeIST)) {
       return res.status(400).json({
-        error: "Invalid time range.",
+        error: "Invalid time range. ",
       });
     }
     console.log("reached in findEvents");
@@ -79,7 +82,7 @@ router.post("", async (req: Request, res: Response) => {
     res.status(200).json(events);
   } catch (error) {
     console.log(error);
-    res.status(500).send("There is an issue with Db");
+    res.status(500).send({ msg: "There is an issue with Db", error: error });
   }
 });
 

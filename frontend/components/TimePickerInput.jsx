@@ -4,8 +4,9 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 
 const TimePickerModal = ({ value, placeHolder, icon, onSelect = "" }) => {
-    const [selectedTime, setSelectedTime] = useState("Schedule Time")
     const [isTimePickerVisible, setTimePickerVisibility] = useState(false);
+    const [showTime, setShowTime] = useState(placeHolder)
+
     const showTimePicker = () => {
         setTimePickerVisibility(true);
     };
@@ -14,17 +15,25 @@ const TimePickerModal = ({ value, placeHolder, icon, onSelect = "" }) => {
         setTimePickerVisibility(false);
     };
 
-    const handleTimeConfirm = (date) => {
-        console.warn("A Time has been picked: ", time);
-        const dt = new Date(date)
-        const time = dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        console.log(time);
+    const handleTimeConfirm = (datetime) => {
+        try {
 
-        console.log('time', time)
-        setSelectedTime(time)
-        console.log('setSelectedTime', setSelectedTime)
-        onSelect(time);
-        hideTimePicker();
+            console.log("A Time has been picked: ", datetime)
+            const istTime = datetime.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })
+            console.warn("IST time: ", istTime);
+            const options = {
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true,
+            };
+
+            const formattedTime = datetime.toLocaleString("en-US", options);
+            setShowTime(istTime)
+            onSelect(istTime);
+            hideTimePicker();
+        } catch (error) {
+            console.log("error in handle time confirm", error)
+        }
     };
     return (
 
@@ -37,11 +46,15 @@ const TimePickerModal = ({ value, placeHolder, icon, onSelect = "" }) => {
                     className="w-5  h-5 ml-2 "
                     resizeMode='contain'
                 />
-                <Text className="text-[#9ca3af] ml-4 font-base text-base">{selectedTime}</Text>
+                <Text className="text-[#9ca3af] ml-4 font-base text-base">{showTime}</Text>
                 <DateTimePickerModal
                     display="spinner"
                     isVisible={isTimePickerVisible}
-                    mode="time"
+                    mode="datetime"
+                    is24Hour={false}
+                    // timeZoneName={'Europe/London'}
+                    maximumDate={new Date(2025, 11, 31)}
+                    minimumDate={new Date()}
                     onConfirm={handleTimeConfirm}
                     onCancel={hideTimePicker}
                     positiveButton={{ label: 'Set', textColor: '#FFCC08' }}

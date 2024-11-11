@@ -10,14 +10,19 @@ const prisma = new client_1.PrismaClient();
 const router = (0, express_1.Router)();
 router.post("", async (req, res) => {
     try {
+        console.log("reached in find event");
         const { pickupId, dropId, fromTime, toTime } = req.body;
         console.log("req body", pickupId, dropId, fromTime, toTime);
+        console.log("pickupId", pickupId);
+        console.log("dropId", dropId);
+        console.log("fromTime", fromTime, fromTime.length);
+        console.log("toTime ", toTime, toTime.length);
         const parsedFromTimeIST = (0, timeConversion_1.default)(fromTime);
         const parsedToTimeIST = (0, timeConversion_1.default)(toTime);
-        if (isNaN(parsedFromTimeIST.getTime()) ||
-            isNaN(parsedToTimeIST.getTime())) {
+        console.log(typeof parsedFromTimeIST, parsedToTimeIST);
+        if (isNaN(parsedFromTimeIST) || isNaN(parsedToTimeIST)) {
             return res.status(400).json({
-                error: "Invalid time range.",
+                error: "Invalid time range. ",
             });
         }
         console.log("reached in findEvents");
@@ -75,7 +80,7 @@ router.post("", async (req, res) => {
     }
     catch (error) {
         console.log(error);
-        res.status(500).send("There is an issue with Db");
+        res.status(500).send({ msg: "There is an issue with Db", error: error });
     }
 });
 exports.default = router;

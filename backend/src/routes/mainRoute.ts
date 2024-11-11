@@ -7,6 +7,7 @@ import findEvent from "./findEvent";
 import locations from "./locations";
 import authRoute from "./auth";
 const router = Router();
+
 router.use("/admin", adminRoute);
 router.use("/auth", authRoute);
 router.use("/user", userRoute);
