@@ -53,6 +53,21 @@ router.get("/allCity", (req: Request, res: Response) => {});
 router.get("/allEvents", async (req: Request, res: Response) => {
   try {
     const events = await prisma.event.findMany({
+      select: {
+        id: true,
+        user: {
+          select: {
+            username: true,
+            contact: true,
+            gender: true,
+            profileImg: true,
+          },
+        },
+        pickupLocation: true,
+        dropLocation: true,
+        time: true,
+        price: true,
+      },
       orderBy: {
         time: "desc", // Sorting by date in descending order
       },
